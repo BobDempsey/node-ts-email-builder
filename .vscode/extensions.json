@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"better-ts-errors.better-ts-errors",
+		"biomejs.biome",
+		"Orta.vscode-jest",
+		"christian-kohler.path-intellisense"
+	]
+}

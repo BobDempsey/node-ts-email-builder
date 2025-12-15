@@ -1,0 +1,14 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(npm test:*)",
+			"Bash(npm run test:coverage:*)",
+			"WebFetch(domain:code.claude.com)",
+			"Bash(netstat:*)",
+			"Bash(findstr:*)",
+			"Bash(npm run build:*)"
+		],
+		"deny": [],
+		"ask": []
+	}
+}

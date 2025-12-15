@@ -1,0 +1,99 @@
+### VS Code REST Client tests
+### Start the dev server first: `npm run dev`
+### Then click "Send Request" above any request below
+
+@baseUrl = http://localhost:3000
+
+# You can override baseUrl per environment by creating a `.vscode/settings.json`
+# or using REST Client environment files.
+
+###############################################################################
+# Basic GET Requests
+###############################################################################
+
+### GET root - Basic request
+GET {{baseUrl}}/
+Accept: text/plain
+
+### GET root - With custom header
+GET {{baseUrl}}/
+Accept: text/plain
+X-Custom-Header: TestValue
+User-Agent: VSCode-REST-Client
+
+### GET any path - All paths return same response
+GET {{baseUrl}}/api/test
+Accept: text/plain
+
+###############################################################################
+# POST Requests
+###############################################################################
+
+### POST root - JSON payload
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "message": "hello",
+  "timestamp": "2025-12-04T00:00:00Z"
+}
+
+### POST root - Form data
+POST {{baseUrl}}/
+Content-Type: application/x-www-form-urlencoded
+
+name=test&value=123
+
+### POST root - Plain text
+POST {{baseUrl}}/
+Content-Type: text/plain
+
+This is plain text data
+
+###############################################################################
+# Other HTTP Methods
+###############################################################################
+
+### PUT request
+PUT {{baseUrl}}/resource
+Content-Type: application/json
+
+{
+  "id": 1,
+  "updated": true
+}
+
+### DELETE request
+DELETE {{baseUrl}}/resource/1
+
+### PATCH request
+PATCH {{baseUrl}}/resource/1
+Content-Type: application/json
+
+{
+  "field": "updated value"
+}
+
+###############################################################################
+# Error & Edge Cases
+###############################################################################
+
+### GET with Accept: application/json (server returns text/plain)
+GET {{baseUrl}}/
+Accept: application/json
+
+### Large payload POST
+POST {{baseUrl}}/
+Content-Type: application/json
+
+{
+  "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "items": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "nested": {
+    "level1": {
+      "level2": {
+        "level3": "deep value"
+      }
+    }
+  }
+}
