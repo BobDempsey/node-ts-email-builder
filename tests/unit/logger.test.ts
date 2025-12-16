@@ -9,17 +9,17 @@
  *
  * 2. Logger Methods
  *    - info(), warn(), error(), debug() available
- *    - Child logger creation with requestId
+ *    - Child logger creation with context
  *
  * 3. Type Safety
- *    - Logger and RequestLogger types exported
+ *    - Logger and ContextLogger types exported
  */
 
 import {
-	createRequestLogger,
+	type ContextLogger,
+	createContextLogger,
 	type Logger,
-	logger,
-	type RequestLogger
+	logger
 } from "@/lib/logger"
 
 describe("Pino Logger", () => {
@@ -46,9 +46,9 @@ describe("Pino Logger", () => {
 	})
 
 	describe("Child Logger", () => {
-		it("should create child logger with requestId", () => {
-			const requestId = "test-request-123"
-			const childLogger = createRequestLogger(requestId)
+		it("should create child logger with context", () => {
+			const context = { requestId: "test-request-123", userId: "user-456" }
+			const childLogger = createContextLogger(context)
 
 			expect(childLogger).toBeDefined()
 			expect(typeof childLogger.info).toBe("function")
@@ -56,9 +56,9 @@ describe("Pino Logger", () => {
 			expect(typeof childLogger.error).toBe("function")
 		})
 
-		it("should create unique child loggers for different requestIds", () => {
-			const childLogger1 = createRequestLogger("request-1")
-			const childLogger2 = createRequestLogger("request-2")
+		it("should create unique child loggers for different contexts", () => {
+			const childLogger1 = createContextLogger({ requestId: "request-1" })
+			const childLogger2 = createContextLogger({ requestId: "request-2" })
 
 			expect(childLogger1).not.toBe(childLogger2)
 		})
@@ -92,9 +92,9 @@ describe("Pino Logger", () => {
 			expect(loggerInstance).toBeDefined()
 		})
 
-		it("should export RequestLogger type", () => {
-			const requestLogger: RequestLogger = createRequestLogger("test")
-			expect(requestLogger).toBeDefined()
+		it("should export ContextLogger type", () => {
+			const contextLogger: ContextLogger = createContextLogger({ test: true })
+			expect(contextLogger).toBeDefined()
 		})
 	})
 })

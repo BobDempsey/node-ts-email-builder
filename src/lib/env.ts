@@ -14,14 +14,6 @@ const LOG_LEVELS = ["fatal", "error", "warn", "info", "debug", "trace"] as const
 
 const EnvSchema = z.object({
 	NODE_ENV: z.enum(NODE_ENV_VALUES).optional(),
-	PORT: z
-		.string()
-		.default("3000")
-		.transform((val) => {
-			const parsed = Number.parseInt(val, 10)
-			return Number.isNaN(parsed) ? 3000 : parsed
-		})
-		.optional(),
 	LOG_LEVEL: z.enum(LOG_LEVELS).default("info").optional()
 })
 

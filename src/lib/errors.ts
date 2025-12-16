@@ -3,32 +3,24 @@
  */
 
 export class AppError extends Error {
-	public readonly statusCode: number
 	public readonly isOperational: boolean
 	public readonly code: string | undefined
 
-	constructor(
-		message: string,
-		statusCode = 500,
-		isOperational = true,
-		code?: string
-	) {
+	constructor(message: string, code?: string, isOperational = true) {
 		super(message)
 		this.name = this.constructor.name
-		this.statusCode = statusCode
-		this.isOperational = isOperational
 		this.code = code
+		this.isOperational = isOperational
 		Error.captureStackTrace(this, this.constructor)
 	}
 
 	/**
-	 * Serialize error for JSON response
+	 * Serialize error for JSON output
 	 */
 	toJSON(includeStack = false): Record<string, unknown> {
 		const base: Record<string, unknown> = {
 			error: this.name,
-			message: this.message,
-			statusCode: this.statusCode
+			message: this.message
 		}
 
 		if (this.code !== undefined) {
@@ -45,24 +37,6 @@ export class AppError extends Error {
 
 export class ValidationError extends AppError {
 	constructor(message: string) {
-		super(message, 400, true, "VALIDATION_ERROR")
-	}
-}
-
-export class NotFoundError extends AppError {
-	constructor(message = "Resource not found") {
-		super(message, 404, true, "NOT_FOUND")
-	}
-}
-
-export class UnauthorizedError extends AppError {
-	constructor(message = "Unauthorized") {
-		super(message, 401, true, "UNAUTHORIZED")
-	}
-}
-
-export class ForbiddenError extends AppError {
-	constructor(message = "Forbidden") {
-		super(message, 403, true, "FORBIDDEN")
+		super(message, "VALIDATION_ERROR")
 	}
 }

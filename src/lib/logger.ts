@@ -14,16 +14,12 @@ const isDevelopment = env.NODE_ENV === "development" || !env.NODE_ENV
 
 // Sensitive data redaction paths
 const redactPaths = [
-	"req.headers.authorization",
-	"req.headers.cookie",
-	"req.body.password",
-	"req.body.token",
-	"req.body.refreshToken",
-	"req.body.accessToken",
 	"*.password",
 	"*.secret",
 	"*.apiKey",
-	"*.token"
+	"*.token",
+	"*.accessToken",
+	"*.refreshToken"
 ]
 
 // Build pino options based on environment
@@ -56,10 +52,10 @@ if (isDevelopment) {
 export const logger = pino(pinoOptions)
 
 /**
- * Create a child logger with request context
+ * Create a child logger with additional context
  */
-export const createRequestLogger = (requestId: string) =>
-	logger.child({ requestId })
+export const createContextLogger = (context: Record<string, unknown>) =>
+	logger.child(context)
 
 export type Logger = typeof logger
-export type RequestLogger = ReturnType<typeof createRequestLogger>
+export type ContextLogger = ReturnType<typeof createContextLogger>

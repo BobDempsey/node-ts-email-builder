@@ -1,9 +1,4 @@
-import {
-	AppError,
-	NotFoundError,
-	UnauthorizedError,
-	ValidationError
-} from "@/lib/errors"
+import { AppError, ValidationError } from "@/lib/errors"
 
 describe("Custom Error Classes", () => {
 	describe("AppError", () => {
@@ -11,21 +6,21 @@ describe("Custom Error Classes", () => {
 			const error = new AppError("Test error")
 
 			expect(error.message).toBe("Test error")
-			expect(error.statusCode).toBe(500)
 			expect(error.isOperational).toBe(true)
 			expect(error.name).toBe("AppError")
+			expect(error.code).toBeUndefined()
 		})
 
-		it("should create error with custom status code", () => {
-			const error = new AppError("Test error", 400)
+		it("should create error with custom code", () => {
+			const error = new AppError("Test error", "CUSTOM_ERROR")
 
 			expect(error.message).toBe("Test error")
-			expect(error.statusCode).toBe(400)
+			expect(error.code).toBe("CUSTOM_ERROR")
 			expect(error.isOperational).toBe(true)
 		})
 
 		it("should create error with custom isOperational flag", () => {
-			const error = new AppError("Test error", 500, false)
+			const error = new AppError("Test error", "ERROR_CODE", false)
 
 			expect(error.isOperational).toBe(false)
 		})
@@ -43,14 +38,31 @@ describe("Custom Error Classes", () => {
 			expect(error.stack).toBeDefined()
 			expect(error.stack).toContain("AppError")
 		})
+
+		it("should serialize to JSON without stack by default", () => {
+			const error = new AppError("Test error", "TEST_CODE")
+			const json = error.toJSON()
+
+			expect(json.error).toBe("AppError")
+			expect(json.message).toBe("Test error")
+			expect(json.code).toBe("TEST_CODE")
+			expect(json.stack).toBeUndefined()
+		})
+
+		it("should serialize to JSON with stack when requested", () => {
+			const error = new AppError("Test error")
+			const json = error.toJSON(true)
+
+			expect(json.stack).toBeDefined()
+		})
 	})
 
 	describe("ValidationError", () => {
-		it("should create error with status 400", () => {
+		it("should create error with VALIDATION_ERROR code", () => {
 			const error = new ValidationError("Invalid input")
 
 			expect(error.message).toBe("Invalid input")
-			expect(error.statusCode).toBe(400)
+			expect(error.code).toBe("VALIDATION_ERROR")
 			expect(error.isOperational).toBe(true)
 			expect(error.name).toBe("ValidationError")
 		})
@@ -61,58 +73,6 @@ describe("Custom Error Classes", () => {
 			expect(error).toBeInstanceOf(Error)
 			expect(error).toBeInstanceOf(AppError)
 			expect(error).toBeInstanceOf(ValidationError)
-		})
-	})
-
-	describe("NotFoundError", () => {
-		it("should create error with default message", () => {
-			const error = new NotFoundError()
-
-			expect(error.message).toBe("Resource not found")
-			expect(error.statusCode).toBe(404)
-			expect(error.isOperational).toBe(true)
-			expect(error.name).toBe("NotFoundError")
-		})
-
-		it("should create error with custom message", () => {
-			const error = new NotFoundError("User not found")
-
-			expect(error.message).toBe("User not found")
-			expect(error.statusCode).toBe(404)
-		})
-
-		it("should be instance of AppError", () => {
-			const error = new NotFoundError()
-
-			expect(error).toBeInstanceOf(Error)
-			expect(error).toBeInstanceOf(AppError)
-			expect(error).toBeInstanceOf(NotFoundError)
-		})
-	})
-
-	describe("UnauthorizedError", () => {
-		it("should create error with default message", () => {
-			const error = new UnauthorizedError()
-
-			expect(error.message).toBe("Unauthorized")
-			expect(error.statusCode).toBe(401)
-			expect(error.isOperational).toBe(true)
-			expect(error.name).toBe("UnauthorizedError")
-		})
-
-		it("should create error with custom message", () => {
-			const error = new UnauthorizedError("Invalid token")
-
-			expect(error.message).toBe("Invalid token")
-			expect(error.statusCode).toBe(401)
-		})
-
-		it("should be instance of AppError", () => {
-			const error = new UnauthorizedError()
-
-			expect(error).toBeInstanceOf(Error)
-			expect(error).toBeInstanceOf(AppError)
-			expect(error).toBeInstanceOf(UnauthorizedError)
 		})
 	})
 })
