@@ -1,0 +1,51 @@
+<!-- subject: Welcome to {{company.name}}! -->
+
+<h2 style="color: #333333; margin: 0 0 16px 0; font-size: 24px;">
+  Welcome, {{user.firstName}}!
+</h2>
+
+<p style="margin: 0 0 16px 0; color: #555555;">
+  Thank you for joining {{company.name}}. We're excited to have you on board!
+</p>
+
+<p style="margin: 0 0 16px 0; color: #555555;">
+  Your account has been created with the email address <strong>{{user.email}}</strong>.
+</p>
+
+{{#if user.verificationRequired}}
+<p style="margin: 0 0 16px 0; color: #555555;">
+  To get started, please verify your email address by clicking the button below:
+</p>
+
+{{> button url=verificationUrl text="Verify Email Address"}}
+{{else}}
+<p style="margin: 0 0 16px 0; color: #555555;">
+  You're all set! Click the button below to access your account:
+</p>
+
+{{> button url=loginUrl text="Go to Dashboard"}}
+{{/if}}
+
+<hr style="border: none; border-top: 1px solid #e9ecef; margin: 32px 0;">
+
+<h3 style="color: #333333; margin: 0 0 16px 0; font-size: 18px;">
+  What's Next?
+</h3>
+
+<ul style="margin: 0 0 24px 0; padding-left: 20px; color: #555555;">
+  <li style="margin-bottom: 8px;">Complete your profile</li>
+  <li style="margin-bottom: 8px;">Explore our features</li>
+  <li style="margin-bottom: 8px;">Connect with our community</li>
+</ul>
+
+<p style="margin: 0; color: #555555;">
+  If you have any questions, feel free to reach out to our support team at
+  <a href="mailto:{{company.supportEmail}}" style="color: #0066cc; text-decoration: none;">
+    {{company.supportEmail}}
+  </a>.
+</p>
+
+<p style="margin: 24px 0 0 0; color: #555555;">
+  Best regards,<br>
+  <strong>The {{company.name}} Team</strong>
+</p>

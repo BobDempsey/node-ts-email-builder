@@ -6,7 +6,9 @@
 			"WebFetch(domain:code.claude.com)",
 			"Bash(netstat:*)",
 			"Bash(findstr:*)",
-			"Bash(npm run build:*)"
+			"Bash(npm run build:*)",
+			"Bash(git -C \"C:/Users/bobde/OneDrive/Documents/GitHub/node-ts-email-builder\" log --oneline -20)",
+			"Bash(git -C \"C:/Users/bobde/OneDrive/Documents/GitHub/node-ts-email-builder\" show HEAD --stat)"
 		],
 		"deny": [],
 		"ask": []

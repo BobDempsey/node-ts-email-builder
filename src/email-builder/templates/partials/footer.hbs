@@ -1,0 +1,23 @@
+<div class="footer" style="background-color: #f8f9fa; padding: 24px 40px; text-align: center; font-size: 14px; color: #666666;">
+  <p style="margin: 0 0 8px 0;">
+    {{#if company.name}}© {{_year}} {{company.name}}. All rights reserved.{{/if}}
+  </p>
+
+  {{#if company.address}}
+    <p style="margin: 0 0 16px 0; color: #999999;">
+      {{company.address}}
+    </p>
+  {{/if}}
+
+  <div style="margin-top: 16px;">
+    {{#if company.website}}
+      <a href="{{company.website}}" style="color: #0066cc; text-decoration: none; margin: 0 8px;">Website</a>
+    {{/if}}
+    {{#if company.privacy_url}}
+      <a href="{{company.privacy_url}}" style="color: #0066cc; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+    {{/if}}
+    {{#if unsubscribe_url}}
+      <a href="{{unsubscribe_url}}" style="color: #0066cc; text-decoration: none; margin: 0 8px;">Unsubscribe</a>
+    {{/if}}
+  </div>
+</div>

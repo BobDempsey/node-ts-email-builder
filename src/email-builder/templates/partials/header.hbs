@@ -1,0 +1,9 @@
+<div class="header" style="background-color: #0066cc; padding: 24px 40px; text-align: center;">
+  {{#if company.logo}}
+    <img src="{{company.logo}}" alt="{{company.name}}" style="max-width: 150px; height: auto;">
+  {{else}}
+    <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">
+      {{#if company.name}}{{company.name}}{{else}}Your Company{{/if}}
+    </h1>
+  {{/if}}
+</div>

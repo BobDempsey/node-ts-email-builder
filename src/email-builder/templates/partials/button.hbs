@@ -1,0 +1,32 @@
+{{!--
+  Button partial - Creates an email-safe button
+  Usage: {{> button url="https://example.com" text="Click Me" color="#0066cc" textColor="#ffffff"}}
+--}}
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+  <tr>
+    <td align="center">
+      <!--[if mso]>
+      <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{url}}" style="height:44px;v-text-anchor:middle;width:200px;" arcsize="10%" stroke="f" fillcolor="{{#if color}}{{color}}{{else}}#0066cc{{/if}}">
+        <w:anchorlock/>
+        <center style="color:{{#if textColor}}{{textColor}}{{else}}#ffffff{{/if}};font-family:sans-serif;font-size:16px;font-weight:bold;">{{text}}</center>
+      </v:roundrect>
+      <![endif]-->
+      <!--[if !mso]><!-->
+      <a href="{{url}}"
+         target="_blank"
+         style="display: inline-block;
+                background-color: {{#if color}}{{color}}{{else}}#0066cc{{/if}};
+                color: {{#if textColor}}{{textColor}}{{else}}#ffffff{{/if}};
+                padding: 12px 32px;
+                font-size: 16px;
+                font-weight: 600;
+                text-decoration: none;
+                border-radius: 6px;
+                text-align: center;
+                mso-padding-alt: 0;">
+        {{text}}
+      </a>
+      <!--<![endif]-->
+    </td>
+  </tr>
+</table>

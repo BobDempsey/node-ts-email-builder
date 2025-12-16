@@ -1,0 +1,31 @@
+{
+	"default": {
+		"company": {
+			"name": "Acme Inc",
+			"logo": null,
+			"website": "https://example.com",
+			"supportEmail": "support@example.com",
+			"address": "123 Main Street, San Francisco, CA 94102",
+			"privacy_url": "https://example.com/privacy"
+		}
+	},
+	"welcome": {
+		"company": {
+			"name": "Acme Inc",
+			"logo": null,
+			"website": "https://example.com",
+			"supportEmail": "support@example.com",
+			"address": "123 Main Street, San Francisco, CA 94102",
+			"privacy_url": "https://example.com/privacy"
+		},
+		"user": {
+			"firstName": "John",
+			"lastName": "Doe",
+			"email": "john.doe@example.com",
+			"verificationRequired": true
+		},
+		"verificationUrl": "https://example.com/verify?token=abc123",
+		"loginUrl": "https://example.com/login",
+		"unsubscribe_url": "https://example.com/unsubscribe?id=123"
+	}
+}
