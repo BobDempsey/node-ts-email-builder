@@ -8,7 +8,8 @@
 			"Bash(findstr:*)",
 			"Bash(npm run build:*)",
 			"Bash(git -C \"C:/Users/bobde/OneDrive/Documents/GitHub/node-ts-email-builder\" log --oneline -20)",
-			"Bash(git -C \"C:/Users/bobde/OneDrive/Documents/GitHub/node-ts-email-builder\" show HEAD --stat)"
+			"Bash(git -C \"C:/Users/bobde/OneDrive/Documents/GitHub/node-ts-email-builder\" show HEAD --stat)",
+			"Bash(cat:*)"
 		],
 		"deny": [],
 		"ask": []

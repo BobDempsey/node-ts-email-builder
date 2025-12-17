@@ -1,0 +1,68 @@
+<!-- subject: New Contact Form Submission from {{sender.name}} -->
+
+<h2 style="color: #333333; margin: 0 0 16px 0; font-size: 24px;">
+  New Contact Form Submission
+</h2>
+
+<p style="margin: 0 0 16px 0; color: #555555;">
+  You've received a new message from your website contact form.
+</p>
+
+<table style="width: 100%; border-collapse: collapse; margin: 0 0 24px 0;">
+  <tr>
+    <td style="padding: 12px; background-color: #f8f9fa; border: 1px solid #e9ecef; width: 120px; color: #666666; font-weight: bold;">
+      From
+    </td>
+    <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e9ecef; color: #333333;">
+      {{sender.name}}
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 12px; background-color: #f8f9fa; border: 1px solid #e9ecef; color: #666666; font-weight: bold;">
+      Email
+    </td>
+    <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e9ecef; color: #333333;">
+      <a href="mailto:{{sender.email}}" style="color: #0066cc; text-decoration: none;">{{sender.email}}</a>
+    </td>
+  </tr>
+  {{#if sender.phone}}
+  <tr>
+    <td style="padding: 12px; background-color: #f8f9fa; border: 1px solid #e9ecef; color: #666666; font-weight: bold;">
+      Phone
+    </td>
+    <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e9ecef; color: #333333;">
+      {{sender.phone}}
+    </td>
+  </tr>
+  {{/if}}
+  <tr>
+    <td style="padding: 12px; background-color: #f8f9fa; border: 1px solid #e9ecef; color: #666666; font-weight: bold;">
+      Subject
+    </td>
+    <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e9ecef; color: #333333;">
+      {{submission.subject}}
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 12px; background-color: #f8f9fa; border: 1px solid #e9ecef; color: #666666; font-weight: bold;">
+      Received
+    </td>
+    <td style="padding: 12px; background-color: #ffffff; border: 1px solid #e9ecef; color: #333333;">
+      {{formatDate submission.timestamp "datetime"}}
+    </td>
+  </tr>
+</table>
+
+<h3 style="color: #333333; margin: 0 0 12px 0; font-size: 18px;">
+  Message
+</h3>
+
+<div style="padding: 16px; background-color: #f8f9fa; border-left: 4px solid #0066cc; margin: 0 0 24px 0; color: #555555; white-space: pre-wrap;">{{submission.message}}</div>
+
+{{> button url=replyUrl text="Reply to Message"}}
+
+<hr style="border: none; border-top: 1px solid #e9ecef; margin: 32px 0;">
+
+<p style="margin: 0; color: #888888; font-size: 12px;">
+  This notification was sent from the {{company.name}} website contact form.
+</p>
