@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--color-primary-50: #eff6ff;
 	--color-primary-100: #dbeafe;
@@ -8,6 +10,14 @@
 	--color-primary-700: #1d4ed8;
 	--color-toolbar: #1f2937;
 	--color-toolbar-hover: #374151;
+
+	/* Dark mode colors */
+	--color-dark-bg: #111827;
+	--color-dark-bg-secondary: #1f2937;
+	--color-dark-surface: #374151;
+	--color-dark-border: #4b5563;
+	--color-dark-text: #f9fafb;
+	--color-dark-text-muted: #9ca3af;
 }
 
 @layer components {
@@ -24,7 +34,7 @@
 	}
 
 	.template-card {
-		@apply flex items-center justify-between px-5 py-3 border-b border-gray-200 hover:bg-gray-50 transition-colors last:border-b-0;
+		@apply flex items-center justify-between px-5 py-3 border-b border-gray-200 hover:bg-gray-50 transition-colors last:border-b-0 dark:border-gray-700 dark:hover:bg-gray-700;
 	}
 
 	.viewport-btn {
@@ -33,5 +43,13 @@
 
 	.viewport-btn.active {
 		@apply bg-primary-600 hover:bg-primary-700;
+	}
+
+	.theme-toggle {
+		@apply p-2 rounded-lg text-gray-400 hover:text-gray-200 hover:bg-gray-700 transition-colors cursor-pointer border-none bg-transparent;
+	}
+
+	.theme-toggle-index {
+		@apply p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer border-none bg-transparent dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700;
 	}
 }

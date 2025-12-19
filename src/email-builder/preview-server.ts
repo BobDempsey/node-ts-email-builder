@@ -272,14 +272,14 @@ class PreviewServer {
 					.map(
 						(t) => `
           <li class="template-card group">
-            <a href="/preview/${t}" class="text-primary-600 hover:text-primary-700 font-medium hover:underline">${t}</a>
+            <a href="/preview/${t}" class="text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 font-medium hover:underline">${t}</a>
             <span class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-              <a href="/preview/${t}?raw=true" target="_blank" class="text-gray-400 hover:text-gray-600" title="Raw HTML">
+              <a href="/preview/${t}?raw=true" target="_blank" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" title="Raw HTML">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
                 </svg>
               </a>
-              <a href="/preview/${t}/text" target="_blank" class="text-gray-400 hover:text-gray-600" title="Plain text">
+              <a href="/preview/${t}/text" target="_blank" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" title="Plain text">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
@@ -289,7 +289,7 @@ class PreviewServer {
         `
 					)
 					.join("")
-			: '<li class="px-5 py-8 text-center text-gray-500 italic">No templates found. Create .hbs files in templates/emails/</li>'
+			: '<li class="px-5 py-8 text-center text-gray-500 dark:text-gray-400 italic">No templates found. Create .hbs files in templates/emails/</li>'
 
 		return `
 <!DOCTYPE html>
@@ -299,30 +299,49 @@ class PreviewServer {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Email Preview</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
-<body class="min-h-screen bg-gray-100">
+<body class="min-h-screen bg-gray-100 dark:bg-gray-900">
   <div class="max-w-4xl mx-auto px-6 py-12">
     <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Email Preview</h1>
-      <p class="text-gray-600">Select a template to preview</p>
+    <div class="mb-8 flex items-start justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Email Preview</h1>
+        <p class="text-gray-600 dark:text-gray-400">Select a template to preview</p>
+      </div>
+      <button id="theme-toggle" class="theme-toggle-index" title="Toggle dark mode">
+        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+        </svg>
+        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+        </svg>
+      </button>
     </div>
 
     <!-- Templates Card -->
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div class="px-5 py-4 bg-gray-50 border-b border-gray-200">
-        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+      <div class="px-5 py-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+        <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
           Available Templates
         </h2>
       </div>
-      <ul class="divide-y divide-gray-200">${templateList}</ul>
+      <ul class="divide-y divide-gray-200 dark:divide-gray-700">${templateList}</ul>
     </div>
 
     <!-- Quick Stats -->
     <div class="mt-8 grid grid-cols-1 gap-4">
-      <div class="bg-white rounded-lg p-4 shadow">
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
         <p class="text-2xl font-bold text-primary-600">${templates.length}</p>
-        <p class="text-sm text-gray-500">Template${templates.length !== 1 ? "s" : ""}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Template${templates.length !== 1 ? "s" : ""}</p>
       </div>
     </div>
   </div>
@@ -331,7 +350,21 @@ class PreviewServer {
 
   <script>
     const status = document.getElementById('status');
+    const themeToggle = document.getElementById('theme-toggle');
     let ws;
+
+    // Theme toggle
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        document.documentElement.classList.toggle('dark', e.matches);
+      }
+    });
 
     function connect() {
       ws = new WebSocket('ws://' + location.host);
@@ -376,8 +409,17 @@ class PreviewServer {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preview: ${templateName}</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200 dark:bg-gray-900">
   <!-- Toolbar -->
   <div class="fixed top-0 left-0 right-0 h-14 bg-gray-800 flex items-center px-4 z-50 gap-4 shadow-lg">
     <a href="/" class="text-white/80 hover:text-white flex items-center gap-2 transition-colors">
@@ -414,6 +456,18 @@ class PreviewServer {
 
     <div class="h-6 w-px bg-gray-600"></div>
 
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">
+      <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+      </svg>
+      <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+      </svg>
+    </button>
+
+    <div class="h-6 w-px bg-gray-600"></div>
+
     <!-- Action Links -->
     <a href="/preview/${templateName}?raw=true" target="_blank" class="text-white/80 hover:text-white text-sm flex items-center gap-1 transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
@@ -441,6 +495,7 @@ class PreviewServer {
   <script>
     const frame = document.getElementById('frame');
     const buttons = document.querySelectorAll('.viewport-btn');
+    const themeToggle = document.getElementById('theme-toggle');
 
     function setViewport(size) {
       // Reset all buttons
@@ -460,6 +515,19 @@ class PreviewServer {
       // Highlight active button
       document.querySelector('[data-size="' + size + '"]').classList.add('active');
     }
+
+    // Theme toggle
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        document.documentElement.classList.toggle('dark', e.matches);
+      }
+    });
 
     // WebSocket for hot reload
     const status = document.getElementById('status');
@@ -505,11 +573,20 @@ class PreviewServer {
 <head>
   <title>Error</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
-<body class="min-h-screen bg-red-50 p-10">
+<body class="min-h-screen bg-red-50 dark:bg-gray-900 p-10">
   <div class="max-w-3xl mx-auto">
     <!-- Error Card -->
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
       <!-- Error Header -->
       <div class="bg-red-600 px-6 py-4">
         <div class="flex items-center gap-3">
@@ -522,23 +599,23 @@ class PreviewServer {
 
       <!-- Error Content -->
       <div class="p-6">
-        <p class="text-gray-800 mb-4 text-lg">${this._escapeHtml(error.message)}</p>
+        <p class="text-gray-800 dark:text-gray-200 mb-4 text-lg">${this._escapeHtml(error.message)}</p>
 
         ${
 					error.stack
 						? `
         <details class="mt-4">
-          <summary class="cursor-pointer text-gray-600 hover:text-gray-800 font-medium">
+          <summary class="cursor-pointer text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium">
             Stack Trace
           </summary>
-          <pre class="mt-2 bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto text-gray-700">${this._escapeHtml(error.stack)}</pre>
+          <pre class="mt-2 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-sm overflow-x-auto text-gray-700 dark:text-gray-300">${this._escapeHtml(error.stack)}</pre>
         </details>
         `
 						: ""
 				}
 
-        <div class="mt-6 pt-6 border-t border-gray-200">
-          <a href="/" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium transition-colors">
+        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <a href="/" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 dark:text-primary-500 dark:hover:text-primary-400 font-medium transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
