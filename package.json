@@ -1,7 +1,7 @@
 {
-	"name": "node-ts-library-template",
+	"name": "node-ts-email-builder",
 	"version": "1.0.0",
-	"description": "A Node.js TypeScript library template with utilities",
+	"description": "A TypeScript email builder library with Handlebars templates, CSS inlining, and live preview",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"files": [
@@ -30,35 +30,22 @@
 		"prepare": "husky"
 	},
 	"keywords": [
-		"nodejs",
-		"node",
+		"email",
+		"email-builder",
+		"email-templates",
+		"handlebars",
+		"html-email",
 		"typescript",
-		"template",
-		"library",
-		"utility",
-		"environment",
-		"env",
-		"zod",
-		"validation",
-		"logger",
-		"pino",
-		"jest",
-		"testing",
-		"lint",
-		"format",
-		"biome",
-		"vscode",
-		"configuration",
-		"schema",
-		"typesafe",
-		"unit",
-		"constants"
+		"nodejs",
+		"css-inline",
+		"mjml-alternative",
+		"transactional-email"
 	],
 	"author": "",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/BobDempsey/node-ts-template.git"
+		"url": "git+https://github.com/BobDempsey/node-ts-email-builder.git"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.6",
@@ -82,12 +69,11 @@
 		"typescript": "^5.3.3"
 	},
 	"engines": {
-		"node": ">=24.0.0",
+		"node": ">=20.0.0",
 		"npm": ">=10.0.0"
 	},
 	"dependencies": {
 		"chokidar": "^3.6.0",
-		"dotenv": "^17.2.3",
 		"express": "^4.21.1",
 		"handlebars": "^4.7.8",
 		"html-to-text": "^9.0.5",
