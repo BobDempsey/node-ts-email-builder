@@ -104,7 +104,7 @@ class PreviewServer {
 
 		if (this.server) {
 			return new Promise((resolve) => {
-				this.server!.close(() => resolve())
+				this.server?.close(() => resolve())
 			})
 		}
 	}
@@ -271,17 +271,25 @@ class PreviewServer {
 			? templates
 					.map(
 						(t) => `
-          <li>
-            <a href="/preview/${t}" class="template-link">${t}</a>
-            <span class="template-actions">
-              <a href="/preview/${t}?raw=true" target="_blank" title="Raw HTML">📄</a>
-              <a href="/preview/${t}/text" target="_blank" title="Plain text">📝</a>
+          <li class="template-card group">
+            <a href="/preview/${t}" class="text-primary-600 hover:text-primary-700 font-medium hover:underline">${t}</a>
+            <span class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+              <a href="/preview/${t}?raw=true" target="_blank" class="text-gray-400 hover:text-gray-600" title="Raw HTML">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                </svg>
+              </a>
+              <a href="/preview/${t}/text" target="_blank" class="text-gray-400 hover:text-gray-600" title="Plain text">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+              </a>
             </span>
           </li>
         `
 					)
 					.join("")
-			: '<li class="empty">No templates found. Create .hbs files in templates/emails/</li>'
+			: '<li class="px-5 py-8 text-center text-gray-500 italic">No templates found. Create .hbs files in templates/emails/</li>'
 
 		return `
 <!DOCTYPE html>
@@ -290,93 +298,36 @@ class PreviewServer {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Email Preview</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
-      min-height: 100vh;
-      padding: 40px;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h1 {
-      color: #333;
-      margin-bottom: 8px;
-    }
-    .subtitle {
-      color: #666;
-      margin-bottom: 32px;
-    }
-    .templates {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    .templates h2 {
-      padding: 16px 20px;
-      background: #f8f9fa;
-      border-bottom: 1px solid #e9ecef;
-      font-size: 14px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    ul {
-      list-style: none;
-    }
-    li {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      border-bottom: 1px solid #e9ecef;
-    }
-    li:last-child { border-bottom: none; }
-    li.empty {
-      color: #999;
-      font-style: italic;
-    }
-    .template-link {
-      color: #0066cc;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .template-link:hover { text-decoration: underline; }
-    .template-actions a {
-      margin-left: 12px;
-      text-decoration: none;
-      opacity: 0.6;
-    }
-    .template-actions a:hover { opacity: 1; }
-    .status {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 8px 16px;
-      background: #28a745;
-      color: white;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    .status.disconnected { background: #dc3545; }
-  </style>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-  <div class="container">
-    <h1>Email Preview</h1>
-    <p class="subtitle">Select a template to preview</p>
+<body class="min-h-screen bg-gray-100">
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Email Preview</h1>
+      <p class="text-gray-600">Select a template to preview</p>
+    </div>
 
-    <div class="templates">
-      <h2>Available Templates</h2>
-      <ul>${templateList}</ul>
+    <!-- Templates Card -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="px-5 py-4 bg-gray-50 border-b border-gray-200">
+        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+          Available Templates
+        </h2>
+      </div>
+      <ul class="divide-y divide-gray-200">${templateList}</ul>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="mt-8 grid grid-cols-1 gap-4">
+      <div class="bg-white rounded-lg p-4 shadow">
+        <p class="text-2xl font-bold text-primary-600">${templates.length}</p>
+        <p class="text-sm text-gray-500">Template${templates.length !== 1 ? "s" : ""}</p>
+      </div>
     </div>
   </div>
 
-  <div class="status" id="status">Connected</div>
+  <div class="status-indicator connected" id="status">Connected</div>
 
   <script>
     const status = document.getElementById('status');
@@ -387,12 +338,12 @@ class PreviewServer {
 
       ws.onopen = () => {
         status.textContent = 'Connected';
-        status.className = 'status';
+        status.className = 'status-indicator connected';
       };
 
       ws.onclose = () => {
         status.textContent = 'Disconnected';
-        status.className = 'status disconnected';
+        status.className = 'status-indicator disconnected';
         setTimeout(connect, 2000);
       };
 
@@ -424,112 +375,90 @@ class PreviewServer {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preview: ${templateName}</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #e9ecef;
-    }
-    .toolbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 48px;
-      background: #343a40;
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      z-index: 100;
-      gap: 16px;
-    }
-    .toolbar a {
-      color: white;
-      text-decoration: none;
-      opacity: 0.8;
-    }
-    .toolbar a:hover { opacity: 1; }
-    .toolbar .title {
-      color: white;
-      font-weight: 500;
-      flex: 1;
-    }
-    .toolbar .viewport-btns {
-      display: flex;
-      gap: 8px;
-    }
-    .toolbar button {
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      background: #495057;
-      color: white;
-      cursor: pointer;
-    }
-    .toolbar button:hover { background: #6c757d; }
-    .toolbar button.active { background: #0066cc; }
-    .preview-container {
-      margin-top: 48px;
-      padding: 24px;
-      display: flex;
-      justify-content: center;
-    }
-    .preview-frame {
-      background: white;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-      transition: width 0.3s ease;
-      width: 100%;
-      max-width: 800px;
-    }
-    .preview-frame.mobile { max-width: 375px; }
-    .preview-frame.tablet { max-width: 768px; }
-    iframe {
-      width: 100%;
-      border: none;
-      height: calc(100vh - 96px);
-    }
-    .status {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 8px 16px;
-      background: #28a745;
-      color: white;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    .status.disconnected { background: #dc3545; }
-  </style>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-  <div class="toolbar">
-    <a href="/">← Back</a>
-    <span class="title">${templateName}${result.subject ? ` — ${result.subject}` : ""}</span>
-    <div class="viewport-btns">
-      <button onclick="setViewport('mobile')" title="Mobile (375px)">📱</button>
-      <button onclick="setViewport('tablet')" title="Tablet (768px)">📱</button>
-      <button onclick="setViewport('desktop')" class="active" title="Desktop (800px)">🖥️</button>
+<body class="bg-gray-200">
+  <!-- Toolbar -->
+  <div class="fixed top-0 left-0 right-0 h-14 bg-gray-800 flex items-center px-4 z-50 gap-4 shadow-lg">
+    <a href="/" class="text-white/80 hover:text-white flex items-center gap-2 transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Back
+    </a>
+
+    <div class="h-6 w-px bg-gray-600"></div>
+
+    <span class="text-white font-medium flex-1 truncate">
+      ${templateName}${result.subject ? `<span class="text-gray-400 font-normal ml-2">— ${result.subject}</span>` : ""}
+    </span>
+
+    <!-- Viewport Controls -->
+    <div class="flex gap-1 bg-gray-700/50 rounded-lg p-1">
+      <button onclick="setViewport('mobile')" class="viewport-btn" data-size="mobile" title="Mobile (375px)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+        </svg>
+      </button>
+      <button onclick="setViewport('tablet')" class="viewport-btn" data-size="tablet" title="Tablet (768px)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5h3m-6.75 2.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-15a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 4.5v15a2.25 2.25 0 0 0 2.25 2.25Z" />
+        </svg>
+      </button>
+      <button onclick="setViewport('desktop')" class="viewport-btn active" data-size="desktop" title="Desktop (800px)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+        </svg>
+      </button>
     </div>
-    <a href="/preview/${templateName}?raw=true" target="_blank">Raw HTML</a>
-    <a href="/preview/${templateName}/text" target="_blank">Plain Text</a>
+
+    <div class="h-6 w-px bg-gray-600"></div>
+
+    <!-- Action Links -->
+    <a href="/preview/${templateName}?raw=true" target="_blank" class="text-white/80 hover:text-white text-sm flex items-center gap-1 transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+      </svg>
+      HTML
+    </a>
+    <a href="/preview/${templateName}/text" target="_blank" class="text-white/80 hover:text-white text-sm flex items-center gap-1 transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+      </svg>
+      Text
+    </a>
   </div>
 
-  <div class="preview-container">
-    <div class="preview-frame" id="frame">
-      <iframe id="preview" srcdoc="${this._escapeHtml(result.html)}"></iframe>
+  <!-- Preview Container -->
+  <div class="mt-14 p-6 flex justify-center min-h-[calc(100vh-56px)]">
+    <div id="frame" class="bg-white shadow-2xl transition-all duration-300 ease-out w-full max-w-[800px] rounded-lg overflow-hidden">
+      <iframe id="preview" class="w-full border-none h-[calc(100vh-104px)]" srcdoc="${this._escapeHtml(result.html)}"></iframe>
     </div>
   </div>
 
-  <div class="status" id="status">Connected</div>
+  <div class="status-indicator connected" id="status">Connected</div>
 
   <script>
     const frame = document.getElementById('frame');
-    const buttons = document.querySelectorAll('.viewport-btns button');
+    const buttons = document.querySelectorAll('.viewport-btn');
 
     function setViewport(size) {
-      frame.className = 'preview-frame ' + (size === 'desktop' ? '' : size);
+      // Reset all buttons
       buttons.forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+
+      // Update frame size
+      frame.classList.remove('max-w-[375px]', 'max-w-[768px]', 'max-w-[800px]');
+
+      if (size === 'mobile') {
+        frame.classList.add('max-w-[375px]');
+      } else if (size === 'tablet') {
+        frame.classList.add('max-w-[768px]');
+      } else {
+        frame.classList.add('max-w-[800px]');
+      }
+
+      // Highlight active button
+      document.querySelector('[data-size="' + size + '"]').classList.add('active');
     }
 
     // WebSocket for hot reload
@@ -541,12 +470,12 @@ class PreviewServer {
 
       ws.onopen = () => {
         status.textContent = 'Connected';
-        status.className = 'status';
+        status.className = 'status-indicator connected';
       };
 
       ws.onclose = () => {
         status.textContent = 'Disconnected';
-        status.className = 'status disconnected';
+        status.className = 'status-indicator disconnected';
         setTimeout(connect, 2000);
       };
 
@@ -575,36 +504,49 @@ class PreviewServer {
 <html>
 <head>
   <title>Error</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #fee;
-      padding: 40px;
-    }
-    .error {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 8px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h1 { color: #c00; margin-bottom: 16px; }
-    pre {
-      background: #f5f5f5;
-      padding: 16px;
-      border-radius: 4px;
-      overflow-x: auto;
-    }
-    a { color: #0066cc; }
-  </style>
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
-  <div class="error">
-    <h1>Template Error</h1>
-    <p>${this._escapeHtml(error.message)}</p>
-    ${error.stack ? `<pre>${this._escapeHtml(error.stack)}</pre>` : ""}
-    <p><a href="/">← Back to templates</a></p>
+<body class="min-h-screen bg-red-50 p-10">
+  <div class="max-w-3xl mx-auto">
+    <!-- Error Card -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <!-- Error Header -->
+      <div class="bg-red-600 px-6 py-4">
+        <div class="flex items-center gap-3">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+          </svg>
+          <h1 class="text-xl font-bold text-white">Template Error</h1>
+        </div>
+      </div>
+
+      <!-- Error Content -->
+      <div class="p-6">
+        <p class="text-gray-800 mb-4 text-lg">${this._escapeHtml(error.message)}</p>
+
+        ${
+					error.stack
+						? `
+        <details class="mt-4">
+          <summary class="cursor-pointer text-gray-600 hover:text-gray-800 font-medium">
+            Stack Trace
+          </summary>
+          <pre class="mt-2 bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto text-gray-700">${this._escapeHtml(error.stack)}</pre>
+        </details>
+        `
+						: ""
+				}
+
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <a href="/" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Back to templates
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>

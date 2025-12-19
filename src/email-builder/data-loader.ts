@@ -29,8 +29,9 @@ class DataLoader {
 		const cacheKey = this._getCacheKey(templateName, params)
 
 		// Check cache
-		if (this._isCacheValid(cacheKey)) {
-			return this.cache.get(cacheKey)!
+		const cached = this.cache.get(cacheKey)
+		if (cached && this._isCacheValid(cacheKey)) {
+			return cached
 		}
 
 		let data: TemplateData
@@ -42,7 +43,6 @@ class DataLoader {
 			case "database":
 				data = await this._loadFromDatabase(templateName, params)
 				break
-			case "json":
 			default:
 				data = await this._loadFromJson(templateName)
 		}

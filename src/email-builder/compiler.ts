@@ -52,6 +52,7 @@ class EmailCompiler {
 	/**
 	 * Register built-in Handlebars helpers
 	 */
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: called in constructor
 	private _registerHelpers(): void {
 		// Date formatting
 		this.handlebars.registerHelper(
@@ -192,7 +193,7 @@ class EmailCompiler {
 		this.handlebars.registerHelper(
 			"pluralize",
 			(count: unknown, singular: unknown, plural: unknown) => {
-				return count === 1 ? singular : plural || (singular as string) + "s"
+				return count === 1 ? singular : plural || `${singular as string}s`
 			}
 		)
 
@@ -206,7 +207,7 @@ class EmailCompiler {
 			"eachWithIndex",
 			function (this: unknown, array: unknown[], options: BlockHelperOptions) {
 				let result = ""
-				if (array && array.length) {
+				if (array?.length) {
 					for (let i = 0; i < array.length; i++) {
 						result += options.fn({
 							...(array[i] as object),
@@ -297,8 +298,9 @@ class EmailCompiler {
 	 * Get a compiled template
 	 */
 	private async _getTemplate(templateName: string): Promise<TemplateDelegate> {
-		if (this.templates.has(templateName)) {
-			return this.templates.get(templateName)!
+		const cached = this.templates.get(templateName)
+		if (cached) {
+			return cached
 		}
 
 		const templatePath = path.join(this.config.emailsDir, `${templateName}.hbs`)
@@ -345,8 +347,8 @@ class EmailCompiler {
 			options.layout ??
 			(data._layout as string | undefined) ??
 			this.config.defaultLayout
-		if (layoutName && this.layouts.has(layoutName)) {
-			const layout = this.layouts.get(layoutName)!
+		const layout = layoutName ? this.layouts.get(layoutName) : undefined
+		if (layout) {
 			html = layout({
 				...templateData,
 				body: new this.handlebars.SafeString(html)
